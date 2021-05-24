@@ -1,0 +1,9 @@
+*.swp
+*.swo
+.vim
+
+__pycache__/
+*.pyc
+
+mlruns
+bin/anaconda3

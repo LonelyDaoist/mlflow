@@ -1,0 +1,25 @@
+name: mlflow
+
+conda_env: conda.yaml
+
+entry_points:
+  download:
+    command: "python core/data/download_data.py"
+
+  etl:
+    parameters:
+      raw_data: path
+    command: "python core/features/process_data.py {raw_data}"
+
+  train:
+    parameters:
+      alpha: float
+      l1_ratio: float
+      processed_data: path
+    command: "python core/models/train.py {alpha} {l1_ratio} {processed_data}"
+
+  main:
+    parameters:
+      alpha: float
+      l1_ratio: float
+    command: "python core/main.py {alpha} {l1_ratio}"
