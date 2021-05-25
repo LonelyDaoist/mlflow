@@ -19,11 +19,19 @@ if __name__ == "__main__":
         etl_run = mlflow.run(PATH,"etl",parameters={"raw_data":raw_data})
         etl_run = mlflow.tracking.MlflowClient().get_run(etl_run.run_id)
         processed_data = etl_run.info.artifact_uri
+        
+        print("Launching processed data validation")
+        test_etl_run = mlflow.run(PATH,"test_etl",parameters={"processed_data":processed_data})
+        test_etl_run = mlflow.tracking.MlflowClient().get_run(test_etl_run.run_id)
 
         print("Launching model training")
         train_run = mlflow.run(PATH,"train",parameters={"alpha":alpha,
                                                         "l1_ratio":l1_ratio,
                                                         "processed_data":processed_data})
         train_run = mlflow.tracking.MlflowClient().get_run(train_run.run_id)
+        model = train_run.info.artifact_uri
 
-        print("ML Pipeline output path: ",train_run.info.artifact_uri)
+        print("Launching models testing")
+        test_models_run = mlflow.run(PATH,"test_models",parameters={"model":model})
+
+        print("ML Pipeline finished. Model can be found at: ",model)

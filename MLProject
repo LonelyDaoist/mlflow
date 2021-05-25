@@ -11,6 +11,11 @@ entry_points:
       raw_data: path
     command: "python core/features/process_data.py {raw_data}"
 
+  test_etl:
+    parameters:
+      processed_data: path
+    command: "pytest tests/core/features/test_processed_data.py --processed_data {processed_data}"
+
   train:
     parameters:
       alpha: float
@@ -18,8 +23,13 @@ entry_points:
       processed_data: path
     command: "python core/models/train.py {alpha} {l1_ratio} {processed_data}"
 
+  test_models:
+    parameters:
+      model: path
+    command: "pytest tests/core/models/test_models.py --model {model}"
+
   main:
     parameters:
       alpha: float
       l1_ratio: float
-    command: "python core/main.py {alpha} {l1_ratio}"
+    command: "python main.py {alpha} {l1_ratio}"
