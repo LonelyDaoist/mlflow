@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     for key in urls:
         r = requests.get(urls[key])
-        open(f"{PATH}/data/raw/{key}.csv","wb").write(r.content)
+        open(f"{PATH}/data/raw/tmp/{key}.csv","wb").write(r.content)
 
     with mlflow.start_run():
-        mlflow.log_artifacts(f"{PATH}/data/raw")
+        mlflow.log_artifacts(f"{PATH}/data/raw/tmp")

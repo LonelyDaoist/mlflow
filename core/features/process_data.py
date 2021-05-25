@@ -19,7 +19,7 @@ if __name__ == "__main__":
     data = pd.concat([red,white])
     data = data.sample(frac=1)
 
-    data.to_csv(f"{PATH}/data/processed/data.csv",index=False)
+    data.to_csv(f"{PATH}/data/processed/tmp/data.csv",index=False)
 
     with mlflow.start_run():
-        mlflow.log_artifacts(f"{PATH}/data/processed")
+        mlflow.log_artifacts(f"{PATH}/data/processed/tmp")

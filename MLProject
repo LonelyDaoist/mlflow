@@ -32,4 +32,5 @@ entry_points:
     parameters:
       alpha: float
       l1_ratio: float
-    command: "python main.py {alpha} {l1_ratio}"
+      version: string
+    command: "python main.py {alpha} {l1_ratio} {version}"

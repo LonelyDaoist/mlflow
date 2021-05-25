@@ -7,3 +7,6 @@ __pycache__/
 
 mlruns
 bin/anaconda3
+
+data/raw/tmp
+data/processed/tmp/

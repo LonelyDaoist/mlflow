@@ -1,5 +1,7 @@
 import os
 import sys
+import shutil
+from urllib.parse import urlparse
 
 import mlflow
 
@@ -8,6 +10,7 @@ PATH = os.environ["PYTHONPATH"]
 if __name__ == "__main__":
     alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
     l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+    version = sys.argv[3]
 
     with mlflow.start_run():
         print("Launching data download")
@@ -34,4 +37,12 @@ if __name__ == "__main__":
         print("Launching models testing")
         test_models_run = mlflow.run(PATH,"test_models",parameters={"model":model})
 
-        print("ML Pipeline finished. Model can be found at: ",model)
+
+        raw_path = urlparse(raw_data).path
+        processed_path = urlparse(processed_data).path
+        model_path = urlparse(model).path
+
+        shutil.copytree(f"{raw_path}",f"{PATH}/data/raw/{version}")
+        shutil.copytree(f"{processed_path}",f"{PATH}/data/processed/{version}")
+        shutil.copytree(f"{model_path}/model",f"{PATH}/models/{version}")
+
