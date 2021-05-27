@@ -28,4 +28,4 @@ def testData():
 def test_model(model,testData):
 
     predictions = model.predict(testData)
-    assert all(3 <= p <= 9 for  p in predictions)
+    assert all(0 <= p <= 10 for  p in predictions)
