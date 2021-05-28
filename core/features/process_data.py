@@ -7,9 +7,7 @@ import mlflow
 
 PATH = os.environ["PYTHONPATH"]
 
-if __name__ == "__main__":
-    raw_data = sys.argv[1]
-
+def process(raw_data):
     red = pd.read_csv(f"{raw_data}/red_wine.csv",sep=";")
     white = pd.read_csv(f"{raw_data}/white_wine.csv",sep=";")
 
@@ -23,3 +21,8 @@ if __name__ == "__main__":
 
     with mlflow.start_run():
         mlflow.log_artifacts(f"{PATH}/data/processed/tmp")
+
+
+if __name__ == "__main__":
+    raw_data = sys.argv[1]
+    process(raw_data)

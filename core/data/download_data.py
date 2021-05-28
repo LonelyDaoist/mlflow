@@ -5,7 +5,7 @@ import mlflow
 
 PATH = os.environ["PYTHONPATH"]
 
-if __name__ == "__main__":
+def download():
     urls = {
             "red_wine": "http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv",
             "white_wine": "http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"
@@ -17,3 +17,6 @@ if __name__ == "__main__":
 
     with mlflow.start_run():
         mlflow.log_artifacts(f"{PATH}/data/raw/tmp")
+
+if __name__ == "__main__":
+    download()

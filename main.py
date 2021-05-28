@@ -5,12 +5,12 @@ from urllib.parse import urlparse
 
 import mlflow
 
+from core.models.generate_models import find_best_model
+
 PATH = os.environ["PYTHONPATH"]
 
 if __name__ == "__main__":
-    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
-    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
-    version = sys.argv[3]
+    version = sys.argv[1]
 
     with mlflow.start_run():
         print("Launching data download")
@@ -28,12 +28,12 @@ if __name__ == "__main__":
         test_etl_run = mlflow.tracking.MlflowClient().get_run(test_etl_run.run_id)
 
         print("Launching model training")
-        train_run = mlflow.run(PATH,"train",parameters={"alpha":alpha,
-                                                        "l1_ratio":l1_ratio,
-                                                        "processed_data":processed_data})
+        train_run = mlflow.run(PATH,"train",parameters={"processed_data":processed_data})
         train_run = mlflow.tracking.MlflowClient().get_run(train_run.run_id)
-        model = train_run.info.artifact_uri
 
+        model_run_id = find_best_model()
+        model = f"file://{PATH}mlruns/0/{model_run_id}/artifacts"
+        
         print("Launching models testing")
         test_models_run = mlflow.run(PATH,"test_models",parameters={"model":model})
 

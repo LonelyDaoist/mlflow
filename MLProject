@@ -18,10 +18,8 @@ entry_points:
 
   train:
     parameters:
-      alpha: float
-      l1_ratio: float
       processed_data: path
-    command: "python core/models/train.py {alpha} {l1_ratio} {processed_data}"
+    command: "python core/models/generate_models.py {processed_data}"
 
   test_models:
     parameters:
@@ -30,7 +28,5 @@ entry_points:
 
   main:
     parameters:
-      alpha: float
-      l1_ratio: float
       version: string
-    command: "python main.py {alpha} {l1_ratio} {version}"
+    command: "python main.py {version}"

@@ -16,25 +16,14 @@ import logging
 from core.utils import utils
 
 PATH = os.environ["PYTHONPATH"]
-
-
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
-if __name__ == "__main__":
+def train(alpha,l1_ratio,processed_data):
     warnings.filterwarnings("ignore")
     np.random.seed(40)
 
-    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
-    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
-    processed_data = sys.argv[3]
-
-    try:
-        data = pd.read_csv(f"{processed_data}/data.csv")
-    except Exception as e:
-        logger.exception(
-            "Unable to download training & test CSV, check your internet connection. Error: %s", e
-        )
+    data = pd.read_csv(f"{processed_data}/data.csv")
 
     # Split the data into training and test sets. (0.75, 0.25) split.
     train, test = train_test_split(data)
@@ -45,8 +34,7 @@ if __name__ == "__main__":
     train_y = train[["quality"]]
     test_y = test[["quality"]]
 
-
-    with mlflow.start_run():
+    with mlflow.start_run(nested=True):
         lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
         lr.fit(train_x, train_y)
 
@@ -77,5 +65,10 @@ if __name__ == "__main__":
             mlflow.sklearn.log_model(lr, "model", registered_model_name="ElasticnetWineModel")
         else:
             mlflow.sklearn.log_model(lr, "model")
-            
 
+if __name__ == "__main__":
+    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
+    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+    processed_data = sys.argv[3]
+
+    train(alpha,l1_ratio,processed_data)
